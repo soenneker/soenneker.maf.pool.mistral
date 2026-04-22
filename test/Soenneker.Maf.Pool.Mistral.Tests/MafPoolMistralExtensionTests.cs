@@ -1,14 +1,13 @@
-using Xunit;
 
 namespace Soenneker.Maf.Pool.Mistral.Tests;
 
 public sealed class MafPoolMistralExtensionTests
 {
-    public MafPoolMistralExtensionTests(ITestOutputHelper output)
+    public MafPoolMistralExtensionTests( output)
     {
     }
 
-    [Fact]
+    [Test]
     public void Default()
     {
 
