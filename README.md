@@ -13,16 +13,26 @@ Provides Mistral-specific registration extensions for `IMafPool`, enabling integ
 dotnet add package Soenneker.Maf.Pool.Mistral
 ```
 
-## Quick start
+## Usage
 
 ```csharp
 using Soenneker.Maf.Pool.Mistral;
+using Soenneker.Maf.Pool.Abstract;
 
-IMafPool pool = /* obtain from your application */;
-await pool.AddMistral("value", "value", "value", "value", default);
+await pool.AddMistral(
+    poolId: "chat",
+    key: "mistral-primary",
+    modelId: "mistral-small-latest",
+    apiKey: configuration["MISTRAL_API_KEY"]!,
+    rpm: 60,
+    instructions: "Answer concisely.",
+    cancellationToken: cancellationToken);
+
+(AIAgent? agent, IMafPoolEntry? entry) =
+    await pool.GetAvailable("chat", cancellationToken);
 ```
 
-Registers a Mistral model in the agent pool with optional rate/token limits. Uses Mistral's OpenAI-compatible API.
+The default endpoint is Mistral's OpenAI-compatible `https://api.mistral.ai/v1`. Supply `endpoint` when using another compatible deployment.
 
 ## What you get
 
@@ -37,4 +47,7 @@ Registers a Mistral model in the agent pool with optional rate/token limits. Use
 
 ## Practical notes
 
-- Cancellation stops pending work; it does not undo work that has already completed.
+- The agent is created lazily and reused until its entry is removed.
+- Store the API key in a secret provider; the pool retains it in the entry options while the entry is registered.
+- Omitted instructions default to `You are a helpful assistant.`
+- Checkout consumes one request from the configured quota. `tokensPerDay` is not reconciled against actual provider token usage.

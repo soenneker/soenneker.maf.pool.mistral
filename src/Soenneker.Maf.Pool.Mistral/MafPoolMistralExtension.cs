@@ -18,7 +18,7 @@ public static class MafPoolMistralExtension
     /// <summary>
     /// Default Mistral API endpoint.
     /// </summary>
-    public const string DefaultMistralEndpoint = "https://api.mistral.ai";
+    public const string DefaultMistralEndpoint = "https://api.mistral.ai/v1";
 
     /// <summary>
     /// Registers a Mistral model in the agent pool with optional rate/token limits.
